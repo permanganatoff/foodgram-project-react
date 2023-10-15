@@ -108,7 +108,7 @@ class Recipe(models.Model):
         verbose_name='dish image',
         null=False,
         blank=False,
-        upload_to='recipes_images/',
+        upload_to='backend_media/',
     )
     pub_date = models.DateTimeField(
         verbose_name='publication date',
