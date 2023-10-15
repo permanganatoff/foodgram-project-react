@@ -23,13 +23,13 @@ services:
       - db
   
   frontend:
-    image: permanganatoff/foodgram_backend
+    image: permanganatoff/foodgram_frontend
     command: cp -r /app/build/. /frontend_static/
     volumes:
       - ../frontend/:/app/result_build/
   
   gateway:
-    image: nginx:1.19.3
+    image: permanganatoff/foodgram_gateway
     ports:
       - 9006:80
     volumes:
@@ -41,4 +41,5 @@ services:
     depends_on:
       - backend
       - frontend
+    restart: always
       
