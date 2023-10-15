@@ -9,7 +9,7 @@ from djoser.serializers import UserSerializer
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ('name', 'measure_unit')
+        fields = ('name', 'measurement_unit')
 
 
 class TagSerializer(serializers.ModelSerializer):

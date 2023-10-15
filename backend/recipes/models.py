@@ -16,7 +16,7 @@ class Ingredient(models.Model):
         unique=True,
         max_length=250,
     )
-    measure_unit = models.CharField(
+    measurement_unit = models.CharField(
         verbose_name='measure unit',
         null=False,
         blank=False,
@@ -30,7 +30,7 @@ class Ingredient(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return f'{self.name} - {self.measure_unit}'
+        return f'{self.name} - {self.measurement_unit}'
 
 
 class Tag(models.Model):

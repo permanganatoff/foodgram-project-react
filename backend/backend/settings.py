@@ -17,8 +17,6 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='127.0.0.1, localhost').split
 
 AUTH_USER_MODEL = 'users.User'
 
-CSV_DATA_DIR = os.path.join(BASE_DIR, 'data/ingredients.csv')
-
 INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'users.apps.UsersConfig',
