@@ -60,6 +60,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CSRF_TRUSTED_ORIGINS = ['https://vm-permang.hopto.org']
+
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
