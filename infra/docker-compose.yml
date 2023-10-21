@@ -17,16 +17,16 @@ services:
     image: permanganatoff/foodgram_backend
     env_file: .env
     volumes:
-      - static:/app/backend_static/
+      - static:/static/
       - media:/app/media/
     depends_on:
       - db
   
   frontend:
     image: permanganatoff/foodgram_frontend
-    command: cp -r /app/build/. /frontend_static/
+    command: cp -r /app/build/. /static/
     volumes:
-      - ../frontend/:/app/result_build/
+      - static:/static/
   
   gateway:
     image: permanganatoff/foodgram_gateway
@@ -35,5 +35,5 @@ services:
     volumes:
       - ./frontend/build:/usr/share/nginx/html/
       - ./docs/:/usr/share/nginx/html/api/docs/
-      - static:/var/html/static/
-      - media:/var/html/media/
+      - static:/static/
+      - media:/app/media/
