@@ -24,7 +24,7 @@ services:
   
   frontend:
     image: permanganatoff/foodgram_frontend
-    command: cp -r /app/build/. /static/
+    command: cp -r /app/result_build/. /static/
     volumes:
       - static:/static/
   
