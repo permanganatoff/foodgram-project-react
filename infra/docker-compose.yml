@@ -14,8 +14,6 @@ services:
     env_file: ./.env
     volumes:
       - pg_data:/var/lib/postgresql/data
-    networks:
-      - foodgram-network
   
   backend:
     container_name: foodgram_backend
@@ -26,16 +24,12 @@ services:
       - backend_media:/app/media/
     depends_on:
       - db
-    networks:
-      - foodgram-network
   
   frontend:
     container_name: foodgram_frontend
     image: permanganatoff/foodgram_frontend
     volumes:
       - frontend_static:/app/result_build/build
-    networks:
-      - foodgram-network
     depends_on:
       - db
       - backend
@@ -52,6 +46,3 @@ services:
     depends_on:
       - backend
       - frontend
-    networks:
-      - foodgram-network
-
