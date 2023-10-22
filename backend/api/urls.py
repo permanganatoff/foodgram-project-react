@@ -15,14 +15,14 @@ from .views import (
 router = DefaultRouter()
 
 
-router.register('users', UserViewSet)
-router.register('tags', TagViewSet)
-router.register('recipes', RecipeViewSet)
-router.register('ingredients_amount', IngredientAmountViewSet)
-router.register('favorite', FavoriteViewSet)
-router.register('shopping_cart', ShoppingListViewSet)
-router.register('subscriptions', SubscriptionViewSet)
-router.register('ingredients', IngredientViewSet)
+router.register(r'users', UserViewSet, basename='users')
+router.register(r'tags', TagViewSet, basename='tags')
+router.register(r'recipes', RecipeViewSet, basename='recipes')
+router.register(r'ingredients_amount', IngredientAmountViewSet, basename='ingredients_amount')
+router.register(r'favorite', FavoriteViewSet, basename='favorite')
+router.register(r'shopping_cart', ShoppingListViewSet, basename='shopping_cart')
+router.register(r'subscriptions', SubscriptionViewSet, basename='subscriptions')
+router.register(r'ingredients', IngredientViewSet, basename='ingredients')
 
 urlpatterns = [
     path('', include(router.urls)),
