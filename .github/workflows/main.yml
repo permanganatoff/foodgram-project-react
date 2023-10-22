@@ -95,9 +95,9 @@ jobs:
             sudo docker compose pull
             sudo docker compose down
             sudo docker compose up -d
-            sudo docker compose exec backend python manage.py migrate
-            sudo docker compose exec backend python manage.py collectstatic
-            sudo docker compose exec backend cp -r /app/backend_static/. /static/static/
+            sudo docker compose exec -T backend python manage.py makemigrations
+            sudo docker compose exec -T backend python manage.py migrate
+            sudo docker compose exec -T backend python manage.py collectstatic --no-input
             sudo systemctl restart nginx
             sudo docker system prune -af
   
