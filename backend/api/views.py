@@ -20,18 +20,19 @@ class UserViewSet(UserViewSet):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
-    @action(
-        detail=True,
-        methods=['POST', 'GET', 'DEL'],
-        permission_classes=[AllowAny],
-        )
+    @action(methods=['POST', 'DEL'], detail=True, permission_classes=[AllowAny],)
     def subscribe(self, request, id=None):
-        if request.method == 'subscribe-POST':
-            return Response(data='it was POST', status=status.HTTP_200_OK)
-        elif request.method == 'subscribe-GET':
-            return Response(data='it was GET', status=status.HTTP_200_OK)
-        elif request.method == 'subscribe-DEl':
-            return Response(data='it was DEL', status=status.HTTP_200_OK)
+        if request.method == 'POST':
+            return Response(data='it was subscribe post', status=status.HTTP_200_OK)
+        elif request.method == 'DEl':
+            return Response(data='it was subscribe del', status=status.HTTP_200_OK)
+        else:
+            raise ValueError
+
+    @action(methods=['GET',], detail=False, permission_classes=[AllowAny],)
+    def subscriptions(self, request):
+        if request.method == 'GET':
+            return Response (data='it was subscriptions get', status=status.HTTP_200_OK)
         else:
             raise ValueError
 
@@ -45,20 +46,28 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(methods=['POST', 'DEL',], detail=True, permission_classes=[AllowAny])
     def favorite(self, request, id=None):
         if request.method == 'POST':
-            return Response(data='it was favorite-POST', status=status.HTTP_200_OK)
+            return Response(data='it was favorite post', status=status.HTTP_200_OK)
         elif request.method == 'DEl':
-            return Response(data='it was favorite-DEL', status=status.HTTP_200_OK)
+            return Response(data='it was favorite del', status=status.HTTP_200_OK)
         else:
             raise ValueError
 
     @action(methods=['GET',], detail=False, permission_classes=[AllowAny])
     def download_shopping_cart(self, request):
-        return Response(data=request.method, status=status.HTTP_200_OK)
+        if request.method == 'GET':
+            return Response(data='it was download_shopping_cart get', status=status.HTTP_200_OK)
+        else:
+            raise ValueError
     
-
-    @action(methods=['POST', 'GET',], detail=True, permission_classes=[AllowAny])
+    @action(methods=['POST', 'DEL',], detail=True, permission_classes=[AllowAny])
     def shopping_cart(self, request, id=None):
-        return Response(data=request.method, status=status.HTTP_200_OK)
+        if request.method == 'POST':
+            return Response(data='it was shopping_cart post', status=status.HTTP_200_OK)
+        elif request.method == 'DEl':
+            return Response(data='it was shopping_cart del', status=status.HTTP_200_OK)
+        else:
+            raise ValueError
+
 
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()

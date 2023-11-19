@@ -5,9 +5,14 @@ from users.models import User, Subscription
 
 from djoser.serializers import UserSerializer
 
-from django.db import transaction
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers, status
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id','email','username','first_name', 'last_name',)
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
