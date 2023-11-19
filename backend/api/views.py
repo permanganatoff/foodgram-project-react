@@ -15,7 +15,7 @@ from recipes.models import Ingredient, Recipe, Tag
 from users.models import User
 
 
-class UserViewSet(UserViewSet):
+class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [AllowAny]
@@ -35,7 +35,7 @@ class UserViewSet(UserViewSet):
             return Response (data='it was subscriptions get', status=status.HTTP_200_OK)
         else:
             raise ValueError
-
+        
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
