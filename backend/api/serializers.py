@@ -3,13 +3,18 @@ from recipes.models import (Tag, Ingredient, IngredientAmount,
                             Recipe, Favorite, ShoppingList)
 from users.models import User
 
-from djoser.serializers import UserSerializer
+from djoser.serializers import UserSerializer, UserCreateSerializer
 
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers, status
 
 
 class CustomUserSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = ('id','email','username','first_name', 'last_name', 'password')
+
+class CustomUserCreateSerializer(UserCreateSerializer):
     class Meta:
         model = User
         fields = ('id','email','username','first_name', 'last_name', 'password')
