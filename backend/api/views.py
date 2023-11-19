@@ -24,6 +24,7 @@ from recipes.models import (AmountIngredient, Favorite, Ingredient, Recipe,
 from users.models import Subscription, User
 
 
+
 class UserViewSet(UserViewSet):
     queryset = User.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly,)
