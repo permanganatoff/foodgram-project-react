@@ -40,7 +40,7 @@ class User(AbstractUser):
         validators=[
             RegexValidator(
                 regex=r'^[a-zA-Z0-9]+([_.-]?[a-zA-Z0-9])*$',
-                message=('Юзернейм может содержать только цифры, латинские'
+                message=('Имя пользователя может содержать только цифры, латинские'
                          ' буквы, знаки (не в начале): тире, точка и '
                          'нижнее тире.')
             )]
@@ -76,8 +76,8 @@ class Subscription(models.Model):
             models.UniqueConstraint(
                 fields=('user', 'author'),
                 name=(
-                    '\n%(app_label)s_%(class)s user cannot subscribe '
-                    'to same author twice\n'),
+                    '\n%(app_label)s_%(class)s пользователь не может подписаться '
+                    'на того же автора дважды\n'),
             ),
         )
 
@@ -86,5 +86,5 @@ class Subscription(models.Model):
 
     def save(self, *args, **kwargs):
         if self.user == self.author:
-            raise ValidationError('Нельзя подписаться на самого себя')
+            raise ValidationError('Ошибка! Нельзя подписаться на самого себя')
         super().save(*args, **kwargs)

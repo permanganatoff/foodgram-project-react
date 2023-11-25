@@ -56,7 +56,7 @@ class UserViewSet(UserViewSet):
             subscription.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(
-            {'error': 'Вы не подписаны на этого пользователя'},
+            {'error': 'Ошибка! Вы не подписаны на этого пользователя'},
             status=status.HTTP_400_BAD_REQUEST,
         )
 
@@ -119,7 +119,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             object.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(
-            {'error': 'Этого рецепта нет в списке'},
+            {'error': 'Ошибка! Этого рецепта нет в списке'},
             status=status.HTTP_400_BAD_REQUEST,
         )
 

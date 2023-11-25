@@ -124,7 +124,7 @@ class Recipe(models.Model):
     )
     ingredients = models.ManyToManyField(
         Ingredient,
-        verbose_name='Ингридиенты',
+        verbose_name='Ингредиенты',
         related_name='recipes',
         through='AmountIngredient',
         help_text=INGREDIENTS_HELP_TEXT,
@@ -174,10 +174,10 @@ class AmountIngredient(models.Model):
         validators=(
             MinValueValidator(
                 MIN_VALUE,
-                message=f'Должно быть {MIN_VALUE} и больше'),
+                message=f'Ошибка! Должно быть {MIN_VALUE} и больше'),
             MaxValueValidator(
                 MAX_VALUE,
-                message='Число должно быть меньше чем {settings.MAX_VALUE}')),
+                message='Ошибка! Число должно быть меньше чем {settings.MAX_VALUE}')),
     )
 
     class Meta:
@@ -211,8 +211,8 @@ class UserRecipeRelation(models.Model):
         constraints = (
             models.UniqueConstraint(
                 fields=('user', 'recipe'),
-                name=('\n%(app_label)s_%(class)s recipe is'
-                      ' already related to user\n'),
+                name=('\n%(app_label)s_%(class)s рецепт уже'
+                      ' привязан к этому пользователю\n'),
             ),
         )
 

@@ -60,12 +60,12 @@ class SubscribeCreateSerializer(serializers.ModelSerializer):
         if Subscription.objects.filter(
                 author=author_id, user=user_id).exists():
             raise serializers.ValidationError(
-                detail='Вы уже подписаны на этого пользователя!',
+                detail='Ошибка! Вы уже подписаны на этого пользователя!',
                 code=status.HTTP_400_BAD_REQUEST,
             )
         if user_id == author_id:
             raise serializers.ValidationError(
-                detail='Вы не можете подписаться на самого себя!',
+                detail='Ошибка! Вы не можете подписаться на самого себя!',
                 code=status.HTTP_400_BAD_REQUEST,
             )
         return data
@@ -107,8 +107,8 @@ class CreateAmountIngredientSerializer(serializers.ModelSerializer):
         min_value=MIN_VALUE,
         max_value=MAX_VALUE,
         error_messages={
-            'min_value': 'Значение должно быть не меньше {min_value}.',
-            'max_value': 'Количество ингредиента не больше {max_value}'}
+            'min_value': 'Ошибка! Значение должно быть не меньше {min_value}.',
+            'max_value': 'Ошибка! Количество ингредиента не больше {max_value}'}
     )
 
     class Meta:
@@ -166,9 +166,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         max_value=MAX_VALUE,
         error_messages={
             'min_value':
-            f'Время приготовления не может быть меньше {MIN_VALUE} минуты.',
+            f'Ошибка! Время приготовления не может быть меньше {MIN_VALUE} минуты.',
             'max_value':
-            f'Время приготовления не может быть больше {MAX_VALUE} минут.'
+            f'Ошибка! Время приготовления не может быть больше {MAX_VALUE} минут.'
         }
     )
 
@@ -189,26 +189,26 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         ingredients = data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError(
-                {'ingredients': 'Поле ингредиентов не может быть пустым!'}
+                {'ingredients': 'Ошибка! Поле ингредиентов не может быть пустым!'}
             )
         if (len(set(item['id'] for item in ingredients)) != len(ingredients)):
             raise serializers.ValidationError(
-                'Ингридиенты не должны повторяться!')
+                'Ошибка! Ингредиенты не должны повторяться!')
         tags = data.get('tags')
         if not tags:
             raise serializers.ValidationError(
-                {'tags': 'Поле тегов не может быть пустым!'}
+                {'tags': 'Ошибка! Поле тегов не может быть пустым!'}
             )
         if len(set(tags)) != len(tags):
             raise serializers.ValidationError(
-                {'tags': 'Теги не должны повторяться!'}
+                {'tags': 'Ошибка! Теги не должны повторяться!'}
             )
         return data
 
     def validate_image(self, image):
         if not image:
             raise serializers.ValidationError(
-                {'image': 'Поле изображения не может быть пустым!'}
+                {'image': 'Ошибка! Поле изображения не может быть пустым!'}
             )
         return image
 
@@ -264,7 +264,7 @@ class ShoppingCartCreateDeleteSerializer(serializers.ModelSerializer):
         recipe_id = data.get('recipe').id
         if self.Meta.model.objects.filter(user=user_id,
                                           recipe=recipe_id).exists():
-            raise serializers.ValidationError('Рецепт уже добавлен')
+            raise serializers.ValidationError('Ошибка! Рецепт уже добавлен')
         return data
 
     def to_representation(self, instance):
