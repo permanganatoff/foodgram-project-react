@@ -178,10 +178,10 @@ class AmountIngredient(models.Model):
         validators=(
             MinValueValidator(
                 MIN_VALUE,
-                message=f'Ошибка! Должно быть {MIN_VALUE} и больше'),
+                message=f'Должно быть {MIN_VALUE} и больше'),
             MaxValueValidator(
                 MAX_VALUE,
-                message='Ошибка! Число должно быть меньше чем {settings.MAX_VALUE}')),
+                message='Должно быть меньше {settings.MAX_VALUE}')),
     )
 
     class Meta:

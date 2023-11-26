@@ -41,7 +41,7 @@ class User(AbstractUser):
         validators=[
             RegexValidator(
                 regex=r'^[a-zA-Z0-9]+([_.-]?[a-zA-Z0-9])*$',
-                message=('Имя пользователя может содержать только цифры, латинские'
+                message=('Допустимы только цифры, латинские'
                          ' буквы, знаки (не в начале): тире, точка и '
                          'нижнее тире.')
             )]
@@ -78,7 +78,7 @@ class Subscription(models.Model):
             models.UniqueConstraint(
                 fields=('user', 'author'),
                 name=(
-                    '\n%(app_label)s_%(class)s пользователь не может подписаться '
+                    '\n%(app_label)s_%(class)s не может подписаться '
                     'на того же автора дважды\n'),
             ),
         )

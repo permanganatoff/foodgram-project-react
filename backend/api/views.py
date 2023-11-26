@@ -24,7 +24,6 @@ from recipes.models import (AmountIngredient, Favorite, Ingredient, Recipe,
 from users.models import Subscription, User
 
 
-
 class UserViewSet(UserViewSet):
     """View set for User model."""
     queryset = User.objects.all()

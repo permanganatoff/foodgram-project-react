@@ -114,8 +114,8 @@ class CreateAmountIngredientSerializer(serializers.ModelSerializer):
         min_value=MIN_VALUE,
         max_value=MAX_VALUE,
         error_messages={
-            'min_value': 'Ошибка! Значение должно быть не меньше {min_value}.',
-            'max_value': 'Ошибка! Количество ингредиента не больше {max_value}'}
+            'min_value': 'Ошибка! Должно быть не меньше {min_value}.',
+            'max_value': 'Ошибка! Должно быть не больше {max_value}'}
     )
 
     class Meta:
@@ -175,9 +175,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         max_value=MAX_VALUE,
         error_messages={
             'min_value':
-            f'Ошибка! Время приготовления не может быть меньше {MIN_VALUE} минуты.',
+            f'Ошибка! Не может быть меньше {MIN_VALUE} минуты.',
             'max_value':
-            f'Ошибка! Время приготовления не может быть больше {MAX_VALUE} минут.'
+            f'Ошибка! Не может быть больше {MAX_VALUE} минут.'
         }
     )
 
@@ -198,7 +198,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         ingredients = data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError(
-                {'ingredients': 'Ошибка! Поле ингредиентов не может быть пустым!'}
+                {'ingredients': 'Не может быть пустым!'}
             )
         if (len(set(item['id'] for item in ingredients)) != len(ingredients)):
             raise serializers.ValidationError(
