@@ -4,7 +4,7 @@ from recipes.models import Ingredient, Recipe, Tag
 
 
 class IngredientFilter(FilterSet):
-    """Foo."""
+    """Filter for ingredients."""
     name = filters.CharFilter(lookup_expr='istartswith')
 
     class Meta:
@@ -13,7 +13,7 @@ class IngredientFilter(FilterSet):
 
 
 class RecipeFilter(FilterSet):
-    """Foo."""
+    """Filter for recipes."""
     tags = filters.ModelMultipleChoiceFilter(
         field_name='tags__slug',
         to_field_name='slug',
@@ -34,14 +34,14 @@ class RecipeFilter(FilterSet):
         )
 
     def filter_is_favorited(self, queryset, name, value):
-        """Foo."""
+        """Favorite filter for recipes."""
         if value and self.request.user.is_authenticated:
             return queryset.filter(
                 recipes_favorite_related__user=self.request.user)
         return queryset
 
     def filter_is_in_shopping_cart(self, queryset, name, value):
-        """Foo."""
+        """Shopping cart filter for recipes."""
         if value and self.request.user.is_authenticated:
             return queryset.filter(
                 recipes_shoppingcart_related__user=self.request.user)

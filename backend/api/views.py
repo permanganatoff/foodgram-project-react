@@ -26,7 +26,7 @@ from users.models import Subscription, User
 
 
 class UserViewSet(UserViewSet):
-    """Foo."""
+    """View set for User model."""
     queryset = User.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = CustomPagination
@@ -75,7 +75,7 @@ class UserViewSet(UserViewSet):
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
-    """Foo."""
+    """View set for Ingredient model."""
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     filter_backends = [DjangoFilterBackend]
@@ -84,14 +84,14 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
-    """Foo."""
+    """View set for Tag model."""
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     pagination_class = None
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    """Foo."""
+    """View set for Recipe model."""
     queryset = Recipe.objects.select_related('author').prefetch_related(
         'tags', 'ingredients')
     permission_classes = [AuthorOrReadOnly]

@@ -2,5 +2,5 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class CustomPagination(PageNumberPagination):
-    """Foo."""
+    """Paginator for recipes."""
     page_size_query_param = 'limit'
