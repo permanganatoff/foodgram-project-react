@@ -19,8 +19,8 @@ services:
     image: permanganatoff/foodgram_backend
     env_file: ./.env
     volumes:
-      - static_volume:/app/backend_static
-      - media_volume:/app/media
+      - static_volume:/app/backend_static/
+      - media_volume:/app/media/
     depends_on:
       - db
   
@@ -41,7 +41,7 @@ services:
       - 9006:80
     volumes:
       - static_volume:/staticfiles/
-      - media_volume:/media
+      - media_volume:/media/
       - ../docs/:/usr/share/nginx/html/api/docs/
     depends_on:
       - backend
