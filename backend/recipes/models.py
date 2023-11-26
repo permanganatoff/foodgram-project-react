@@ -10,6 +10,7 @@ models.CharField.register_lookup(Length)
 
 
 class Ingredient(models.Model):
+    """Foo."""
     NAME_HELP_TEXT = 'Введите название ингредиента'
     MEASUREMENT_UNIT_HELP_TEXT = 'Введите единицу измерения ингредиента'
     name = models.CharField(
@@ -39,6 +40,7 @@ class Ingredient(models.Model):
 
 
 class Tag(models.Model):
+    """Foo."""
     NAME_HELP_TEXT = 'Введите название тега'
     COLOR_HELP_TEXT = 'Введите HEX-код цвета тега'
     SLUG_HELP_TEXT = 'Введите уникальный идентификатор тега'
@@ -71,6 +73,7 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
+    """Foo."""
     NAME_HELP_TEXT = 'Введите название рецепта'
     AUTHOR_HELP_TEXT = 'Выберите автора рецепта'
     IMAGE_HELP_TEXT = 'Загрузите изображение рецепта'
@@ -146,6 +149,7 @@ class Recipe(models.Model):
 
 
 class AmountIngredient(models.Model):
+    """Foo."""
     INGREDIENT_RECIPE_HELP_TEXT = (
         'Выберите рецепт, к которому относится ингредиент'
     )
@@ -193,6 +197,7 @@ class AmountIngredient(models.Model):
 
 
 class UserRecipeRelation(models.Model):
+    """Foo."""
     user = models.ForeignKey(
         User,
         verbose_name='Пользователь',
@@ -218,6 +223,7 @@ class UserRecipeRelation(models.Model):
 
 
 class Favorite(UserRecipeRelation):
+    """Foo."""
     date_added = models.DateTimeField(
         verbose_name='Дата добавления',
         auto_now_add=True,
@@ -233,6 +239,7 @@ class Favorite(UserRecipeRelation):
 
 
 class ShoppingCart(UserRecipeRelation):
+    """Foo."""
     class Meta(UserRecipeRelation.Meta):
         verbose_name = 'Рецепт в корзине'
         verbose_name_plural = 'Рецепты в корзине'

@@ -9,6 +9,7 @@ from users.models import Subscription, User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """Foo."""
     is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -23,12 +24,14 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
     def get_is_subscribed(self, obj):
+        """Foo."""
         request = self.context.get('request')
         return (request.user.is_authenticated
                 and request.user.followed_users.filter(author=obj).exists())
 
 
 class SubscribeSerializer(UserSerializer):
+    """Foo."""
     recipes_count = serializers.ReadOnlyField(source='recipes.count')
     recipes = serializers.SerializerMethodField()
 
@@ -40,6 +43,7 @@ class SubscribeSerializer(UserSerializer):
         read_only_fields = ('email', 'username', 'first_name', 'last_name')
 
     def get_recipes(self, obj):
+        """Foo."""
         queryset = obj.recipes.all()
         recipes_limit = self.context['request'].GET.get('recipes_limit')
         if recipes_limit and recipes_limit.isdigit():
@@ -50,6 +54,7 @@ class SubscribeSerializer(UserSerializer):
 
 
 class SubscribeCreateSerializer(serializers.ModelSerializer):
+    """Foo."""
     class Meta:
         model = Subscription
         fields = ('user', 'author')
@@ -77,18 +82,21 @@ class SubscribeCreateSerializer(serializers.ModelSerializer):
 
 
 class TagSerializer(serializers.ModelSerializer):
+    """Foo."""
     class Meta:
         model = Tag
         fields = ('id', 'name', 'color', 'slug')
 
 
 class IngredientSerializer(serializers.ModelSerializer):
+    """Foo."""
     class Meta:
         model = Ingredient
         fields = ('id', 'name', 'measurement_unit')
 
 
 class AmountIngredientSerializer(serializers.ModelSerializer):
+    """Foo."""
     id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
@@ -101,6 +109,7 @@ class AmountIngredientSerializer(serializers.ModelSerializer):
 
 
 class CreateAmountIngredientSerializer(serializers.ModelSerializer):
+    """Foo."""
     id = serializers.PrimaryKeyRelatedField(
         queryset=Ingredient.objects.all(), )
     amount = serializers.IntegerField(
@@ -117,6 +126,7 @@ class CreateAmountIngredientSerializer(serializers.ModelSerializer):
 
 
 class RecipeReadSerializer(serializers.ModelSerializer):
+    """Foo."""
     image = Base64ImageField()
     author = UserSerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
@@ -143,18 +153,22 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         )
 
     def get_is_favorited(self, obj):
+        """Foo."""
         return self.get_is_in_user_field(obj, 'recipes_favorite_related')
 
     def get_is_in_shopping_cart(self, obj):
+        """Foo."""
         return self.get_is_in_user_field(obj, 'recipes_shoppingcart_related')
 
     def get_is_in_user_field(self, obj, field):
+        """Foo."""
         request = self.context.get('request')
         return (request.user.is_authenticated and getattr(
             request.user, field).filter(recipe=obj).exists())
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
+    """Foo."""
     image = Base64ImageField()
     author = UserSerializer(read_only=True)
     tags = serializers.PrimaryKeyRelatedField(
@@ -214,6 +228,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def create_ingredients(recipe, ingredients):
+        """Foo."""
         create_ingredients = [
             AmountIngredient(
                 recipe=recipe, ingredient=ingredient['id'],
@@ -247,6 +262,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
+    """Foo."""
     image = Base64ImageField()
 
     class Meta:
@@ -255,6 +271,7 @@ class RecipeShortSerializer(serializers.ModelSerializer):
 
 
 class ShoppingCartCreateDeleteSerializer(serializers.ModelSerializer):
+    """Foo."""
     class Meta:
         model = ShoppingCart
         fields = ('user', 'recipe')
@@ -275,5 +292,6 @@ class ShoppingCartCreateDeleteSerializer(serializers.ModelSerializer):
 
 
 class FavoriteCreateDeleteSerializer(ShoppingCartCreateDeleteSerializer):
+    """Foo."""
     class Meta(ShoppingCartCreateDeleteSerializer.Meta):
         model = Favorite

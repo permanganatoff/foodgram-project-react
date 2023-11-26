@@ -7,6 +7,7 @@ from recipes.constants import MAX_LEN_EMAIL, MAX_LEN_NAME
 
 
 class User(AbstractUser):
+    """Foo."""
     EMAIL_HELP_TEXT = 'Введите вашу электронную почту'
     FIRST_NAME_HELP_TEXT = 'Введите ваше имя'
     LAST_NAME_HELP_TEXT = 'Введите вашу фамилию'
@@ -56,6 +57,7 @@ class User(AbstractUser):
 
 
 class Subscription(models.Model):
+    """Foo."""
     user = models.ForeignKey(
         User,
         related_name='followed_users',
