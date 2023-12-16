@@ -2,7 +2,7 @@ from django.db import transaction
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers, status
 
-from recipes.constants import MAX_VALUE, MIN_VALUE
+from recipes.constants import MAX_AMOUNT, MIN_AMOUNT
 from recipes.models import (AmountIngredient, Favorite, Ingredient, Recipe,
                             ShoppingCart, Tag)
 from users.models import Subscription, User
@@ -111,11 +111,11 @@ class CreateAmountIngredientSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
         queryset=Ingredient.objects.all(), )
     amount = serializers.IntegerField(
-        min_value=MIN_VALUE,
-        max_value=MAX_VALUE,
+        min_value=MIN_AMOUNT,
+        max_value=MAX_AMOUNT,
         error_messages={
-            'min_value': 'Ошибка! Должно быть не меньше {min_value}.',
-            'max_value': 'Ошибка! Должно быть не больше {max_value}'}
+            'min_value': f'Ошибка! Должно быть не меньше {MIN_AMOUNT}.',
+            'max_value': f'Ошибка! Должно быть не больше {MAX_AMOUNT}'}
     )
 
     class Meta:
@@ -171,13 +171,13 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
     )
     ingredients = CreateAmountIngredientSerializer(many=True, write_only=True)
     cooking_time = serializers.IntegerField(
-        min_value=MIN_VALUE,
-        max_value=MAX_VALUE,
+        min_value=MIN_AMOUNT,
+        max_value=MAX_AMOUNT,
         error_messages={
             'min_value':
-            f'Ошибка! Не может быть меньше {MIN_VALUE} минуты.',
+            f'Ошибка! Не может быть меньше {MIN_AMOUNT} минуты.',
             'max_value':
-            f'Ошибка! Не может быть больше {MAX_VALUE} минут.'
+            f'Ошибка! Не может быть больше {MAX_AMOUNT} минут.'
         }
     )
 

@@ -3,7 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models.functions import Length
 
-from recipes.constants import MAX_HEX, MAX_LEN_TITLE, MAX_VALUE, MIN_VALUE
+from recipes.constants import MAX_HEX, MAX_LEN_TITLE, MAX_AMOUNT, MIN_AMOUNT
 from users.models import User
 
 models.CharField.register_lookup(Length)
@@ -111,10 +111,10 @@ class Recipe(models.Model):
     cooking_time = models.PositiveSmallIntegerField(
         'Время приготовления',
         validators=[
-            MinValueValidator(MIN_VALUE,
-                              message=f'Минимум {MIN_VALUE} минута!'),
-            MaxValueValidator(MAX_VALUE,
-                              message=f'Максимум {MAX_VALUE} минут!'),
+            MinValueValidator(MIN_AMOUNT,
+                              message=f'Минимум {MIN_AMOUNT} минута!'),
+            MaxValueValidator(MAX_AMOUNT,
+                              message=f'Максимум {MAX_AMOUNT} минут!'),
         ],
         help_text=COOKING_TIME_HELP_TEXT,
     )
@@ -177,11 +177,11 @@ class AmountIngredient(models.Model):
         help_text=INGREDIENT_AMOUNT_HELP_TEXT,
         validators=(
             MinValueValidator(
-                MIN_VALUE,
-                message=f'Должно быть {MIN_VALUE} и больше'),
+                MIN_AMOUNT,
+                message=f'Должно быть {MIN_AMOUNT} и больше'),
             MaxValueValidator(
-                MAX_VALUE,
-                message='Должно быть меньше {settings.MAX_VALUE}')),
+                MAX_AMOUNT,
+                message=f'Должно быть меньше {MAX_AMOUNT}')),
     )
 
     class Meta:
