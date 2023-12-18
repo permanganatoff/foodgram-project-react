@@ -3,53 +3,48 @@ from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator, RegexValidator
 from django.db import models
 
-from recipes.constants import MAX_LEN_EMAIL, MAX_LEN_NAME
+from recipes.constants import (MAX_LEN_EMAIL, MAX_LEN_NAME, 
+                               USERNAME_FIELD_CONST, REQUIRED_FIELDS_CONST)
 
 
 class User(AbstractUser):
-    """User model."""
-    EMAIL_HELP_TEXT = 'Введите вашу электронную почту'
-    FIRST_NAME_HELP_TEXT = 'Введите ваше имя'
-    LAST_NAME_HELP_TEXT = 'Введите вашу фамилию'
-    USERNAME_HELP_TEXT = 'Введите уникальное имя пользователя'
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ('first_name', 'last_name', 'password', 'username')
+    
+    USERNAME_FIELD = USERNAME_FIELD_CONST
+    REQUIRED_FIELDS = REQUIRED_FIELDS_CONST
 
     email = models.EmailField(
-        verbose_name='Электронная почта',
-        unique=True,
+        verbose_name='User email',
         max_length=MAX_LEN_EMAIL,
+        unique=True,
         validators=[EmailValidator],
-        help_text=EMAIL_HELP_TEXT,
+        help_text='Enter user email'
     )
     first_name = models.CharField(
-        verbose_name='Имя',
+        verbose_name='User first name',
         max_length=MAX_LEN_NAME,
-        help_text=FIRST_NAME_HELP_TEXT,
+        help_text='Enter user first name'
     )
     last_name = models.CharField(
-        verbose_name='Фамилия',
+        verbose_name='User last name',
         max_length=MAX_LEN_NAME,
-        help_text=LAST_NAME_HELP_TEXT,
+        help_text='Enter user last name'
     )
     username = models.CharField(
-        verbose_name='Никнейм',
-        unique=True,
+        verbose_name='Username',
         max_length=MAX_LEN_NAME,
-        help_text=USERNAME_HELP_TEXT,
+        unique=True,
+        help_text='Enter username',
         validators=[
             RegexValidator(
                 regex=r'^[a-zA-Z0-9]+([_.-]?[a-zA-Z0-9])*$',
-                message=('Допустимы только цифры, латинские'
-                         ' буквы, знаки (не в начале): тире, точка и '
-                         'нижнее тире.')
+                message=('Only numbers, latin letters, underscore, dash, dote. '
+                         'Marks should not be at beginning.')
             )]
     )
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = 'User'
+        verbose_name_plural = 'Users'
         ordering = ('username',)
 
     def __str__(self) -> str:
@@ -57,36 +52,35 @@ class User(AbstractUser):
 
 
 class Subscription(models.Model):
-    """Subscription model."""
     user = models.ForeignKey(
-        User,
+        to=User,
         related_name='followed_users',
         on_delete=models.CASCADE,
-        verbose_name='Подписчик',
+        verbose_name='Follower',
     )
     author = models.ForeignKey(
-        User,
+        to=User,
         related_name='author',
         on_delete=models.CASCADE,
-        verbose_name='Автор',
+        verbose_name='Author',
     )
 
     class Meta:
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписки'
+        verbose_name = 'Subscription'
+        verbose_name_plural = 'Subscriptions'
         constraints = (
             models.UniqueConstraint(
                 fields=('user', 'author'),
                 name=(
-                    '\n%(app_label)s_%(class)s не может подписаться '
-                    'на того же автора дважды\n'),
+                    '\n%(app_label)s_%(class)s user cannot subscribe '
+                    'to same author twice\n'),
             ),
         )
 
     def __str__(self):
-        return f'Пользователь {self.user} подписался на {self.author}'
+        return f'User {self.user} subscribed to {self.author}'
 
     def save(self, *args, **kwargs):
         if self.user == self.author:
-            raise ValidationError('Ошибка! Нельзя подписаться на самого себя')
+            raise ValidationError('You cannot subscribe to yourself')
         super().save(*args, **kwargs)
