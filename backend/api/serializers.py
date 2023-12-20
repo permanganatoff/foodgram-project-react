@@ -25,9 +25,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
-        is_subscribed = (request.user.is_authenticated and 
-                         request.user.followed_users.filter(author=obj).
-                         exists())
+        is_subscribed = (
+            request.user.is_authenticated and 
+            request.user.followed_users.filter(author=obj).exists())
         return is_subscribed
 
 
@@ -48,10 +48,9 @@ class SubscribeSerializer(UserSerializer):
         recipes_limit = self.context['request'].GET.get('recipes_limit')
         if recipes_limit and recipes_limit.isdigit():
             queryset = queryset[: int(recipes_limit)]
-        recipes = RecipeShortSerializer(
-            queryset, many=True, 
-            context=self.context).data
-        return recipes
+        recipes = RecipeShortSerializer(queryset, many=True, 
+            context=self.context)
+        return recipes.data
 
 
 class SubscribeCreateSerializer(serializers.ModelSerializer):
@@ -61,25 +60,23 @@ class SubscribeCreateSerializer(serializers.ModelSerializer):
         fields = ('user', 'author')
 
     def validate(self, data):
-        user_id = data.get('user').id
         author_id = data.get('author').id
+        user_id = data.get('user').id
+        if user_id == author_id:
+            raise serializers.ValidationError(
+                detail='no way to subscribe to yourself',
+                code=status.HTTP_400_BAD_REQUEST)
         if Subscription.objects.filter(
                 author=author_id, user=user_id).exists():
             raise serializers.ValidationError(
-                detail='Ошибка! Вы уже подписаны на этого пользователя!',
-                code=status.HTTP_400_BAD_REQUEST,
-            )
-        if user_id == author_id:
-            raise serializers.ValidationError(
-                detail='Ошибка! Вы не можете подписаться на самого себя!',
-                code=status.HTTP_400_BAD_REQUEST,
-            )
+                detail='already subscribed',
+                code=status.HTTP_400_BAD_REQUEST)
         return data
 
     def to_representation(self, instance):
         return SubscribeSerializer(
-            instance.author, context=self.context
-        ).data
+            instance=instance.author,
+            context=self.context).data
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -154,19 +151,20 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         )
 
     def get_is_favorited(self, obj):
-        is_favorited = self.get_is_in_user_field(obj, 'recipes_favorite_related')
+        request = self.context.get('request')
+        is_favorited = (
+            request.user.is_authenticated and 
+            getattr(request.user, 'recipes_favorite_related')
+            .filter(recipe=obj).exists())
         return is_favorited
 
     def get_is_in_shopping_cart(self, obj):
-        is_in_shopping_cart = self.get_is_in_user_field(
-            obj, 'recipes_shoppingcart_related')
-        return is_in_shopping_cart
-
-    def get_is_in_user_field(self, obj, field):
         request = self.context.get('request')
-        is_in_user_field = (request.user.is_authenticated and getattr(
-            request.user, field).filter(recipe=obj).exists())
-        return is_in_user_field
+        is_in_shopping_cart = (
+            request.user.is_authenticated and getattr(
+            request.user, 'recipes_shoppingcart_related')
+            .filter(recipe=obj).exists())
+        return is_in_shopping_cart
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
@@ -202,31 +200,29 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         )
 
     def validate(self, data):
-        ingredients = data.get('ingredients')
-        if not ingredients:
+        if not data.get('image'):
             raise serializers.ValidationError(
-                {'ingredients': 'Не может быть пустым!'}
-            )
-        if (len(set(item['id'] for item in ingredients)) != len(ingredients)):
-            raise serializers.ValidationError(
-                'Ошибка! Ингредиенты не должны повторяться!')
+                detail='must be image',
+                code=status.HTTP_400_BAD_REQUEST)
         tags = data.get('tags')
         if not tags:
             raise serializers.ValidationError(
-                {'tags': 'Ошибка! Поле тегов не может быть пустым!'}
-            )
+                detail='must be tags',
+                code=status.HTTP_400_BAD_REQUEST)
         if len(set(tags)) != len(tags):
             raise serializers.ValidationError(
-                {'tags': 'Ошибка! Теги не должны повторяться!'}
-            )
-        return data
-
-    def validate_image(self, image):
-        if not image:
+                detail='tags should not by repeated',
+                code=status.HTTP_400_BAD_REQUEST) 
+        ingredients = data.get('ingredients')
+        if not ingredients:
             raise serializers.ValidationError(
-                {'image': 'Ошибка! Поле изображения не может быть пустым!'}
-            )
-        return image
+                detail='must be ingredients',
+                code=status.HTTP_400_BAD_REQUEST)
+        if (len(set(item['id'] for item in ingredients)) != len(ingredients)):
+            raise serializers.ValidationError(
+                detail='ingredients should not be repeated',
+                code=status.HTTP_400_BAD_REQUEST)
+        return data
 
     @staticmethod
     def create_ingredients(recipe, ingredients):
