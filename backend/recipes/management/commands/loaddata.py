@@ -35,5 +35,4 @@ class Command(BaseCommand):
             raise CommandError('Tags file not found')
         finally:
             tags_file.close()
-        
         print('Upload data to Ingredients and Tags is complete.')

@@ -3,7 +3,7 @@ from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers, status
 
 from recipes.constants import MAX_AMOUNT, MIN_AMOUNT
-from recipes.models import (AmountIngredient, Favorite, Ingredient, 
+from recipes.models import (AmountIngredient, Favorite, Ingredient,
                             Recipe, ShoppingCart, Tag)
 from users.models import Subscription, User
 
@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'id', 'email', 
+            'id', 'email',
             'username', 'first_name', 'last_name',
             'is_subscribed'
             )
@@ -23,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
         is_subscribed = (
-            request.user.is_authenticated and 
+            request.user.is_authenticated and
             request.user.followed_users.filter(author=obj).exists())
         return is_subscribed
 
@@ -32,7 +32,6 @@ class SubscribeSerializer(UserSerializer):
     """Serializer for subscriptions."""
     recipes_count = serializers.ReadOnlyField(source='recipes.count')
     recipes = serializers.SerializerMethodField()
-
 
     class Meta(UserSerializer.Meta):
         fields = list(UserSerializer.Meta.fields)
@@ -44,7 +43,8 @@ class SubscribeSerializer(UserSerializer):
         recipes_limit = self.context['request'].GET.get('recipes_limit')
         if recipes_limit and recipes_limit.isdigit():
             queryset = queryset[: int(recipes_limit)]
-        recipes = RecipeShortSerializer(queryset, many=True, 
+        recipes = RecipeShortSerializer(
+            queryset, many=True,
             context=self.context)
         return recipes.data
 
@@ -133,22 +133,20 @@ class RecipeReadSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'name',
             'text', 'cooking_time', 'image',
-            'tags','author','ingredients',
+            'tags', 'author', 'ingredients',
             'is_favorited', 'is_in_shopping_cart'
             )
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
-        is_favorited = (
-            request.user.is_authenticated and 
-            getattr(request.user, 'recipes_favorite_related')
+        is_favorited = (request.user.is_authenticated and getattr(
+            request.user, 'recipes_favorite_related')
             .filter(recipe=obj).exists())
         return is_favorited
 
     def get_is_in_shopping_cart(self, obj):
         request = self.context.get('request')
-        is_in_shopping_cart = (
-            request.user.is_authenticated and getattr(
+        is_in_shopping_cart = (request.user.is_authenticated and getattr(
             request.user, 'recipes_shoppingcart_related')
             .filter(recipe=obj).exists())
         return is_in_shopping_cart
@@ -173,7 +171,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'name',
             'text', 'cooking_time', 'image',
-            'tags','author','ingredients'
+            'tags', 'author', 'ingredients'
             )
 
     def validate(self, data):
@@ -189,7 +187,8 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         if len(set(tags)) != len(tags):
             raise serializers.ValidationError(
                 detail='tags should not by repeated',
-                code=status.HTTP_400_BAD_REQUEST) 
+                code=status.HTTP_400_BAD_REQUEST
+                )
         ingredients = data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError(
