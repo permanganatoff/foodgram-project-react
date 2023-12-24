@@ -22,8 +22,7 @@ from api.serializers import (FavoriteCreateDeleteSerializer,
                              SubscribeCreateSerializer,
                              SubscribeSerializer,
                              TagSerializer)
-from recipes.models import (
-                            AmountIngredient, Favorite, Ingredient,
+from recipes.models import (AmountIngredient, Favorite, Ingredient,
                             Recipe, ShoppingCart, Tag)
 from users.models import Subscription, User
 
@@ -138,8 +137,8 @@ class UserViewSet(UserViewSet):
             subscription.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(
-               {'error': 'no such subscribe'},
-               status=status.HTTP_400_BAD_REQUEST)
+            {'error': 'no such subscribe'},
+            status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['get'], detail=False,
             permission_classes=[permissions.IsAuthenticated])

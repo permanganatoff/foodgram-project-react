@@ -17,14 +17,13 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'email',
             'username', 'first_name', 'last_name',
-            'is_subscribed'
-            )
+            'is_subscribed')
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
         is_subscribed = (
-            request.user.is_authenticated and
-            request.user.followed_users.filter(author=obj).exists())
+            request.user.is_authenticated
+            and request.user.followed_users.filter(author=obj).exists())
         return is_subscribed
 
 
@@ -134,8 +133,7 @@ class RecipeReadSerializer(serializers.ModelSerializer):
             'id', 'name',
             'text', 'cooking_time', 'image',
             'tags', 'author', 'ingredients',
-            'is_favorited', 'is_in_shopping_cart'
-            )
+            'is_favorited', 'is_in_shopping_cart')
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
@@ -171,8 +169,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'name',
             'text', 'cooking_time', 'image',
-            'tags', 'author', 'ingredients'
-            )
+            'tags', 'author', 'ingredients')
 
     def validate(self, data):
         if not data.get('image'):
@@ -187,8 +184,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         if len(set(tags)) != len(tags):
             raise serializers.ValidationError(
                 detail='tags should not by repeated',
-                code=status.HTTP_400_BAD_REQUEST
-                )
+                code=status.HTTP_400_BAD_REQUEST)
         ingredients = data.get('ingredients')
         if not ingredients:
             raise serializers.ValidationError(
