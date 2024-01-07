@@ -47,9 +47,8 @@ DATABASES = {
 }
 ```
 
-6. Установите миграции:
+6. Примените миграции:
 ```
-python manage.py makemigrations
 python manage.py migrate
 ```
 7. Соберите статику:
@@ -105,9 +104,8 @@ DB_NAME=foodgram_db
 ```
 docker-compose up -d --build
 ```
-4. Установите миграции:
+4. Примените миграции:
 ```
-docker-compose exec backend python manage.py makemigrations
 docker-compose exec backend python manage.py migrate
 ```
 5. Создайте суперпользователя:
