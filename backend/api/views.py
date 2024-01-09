@@ -22,6 +22,7 @@ from api.serializers import (
     SubscribeCreateSerializer,
     SubscribeSerializer,
     TagSerializer,
+    UserSerializer,
 )
 from api.services import generate_shopping_cart_text
 from recipes.models import (
@@ -123,6 +124,7 @@ class RecipeViewSet(BaseRelationsViewSet, viewsets.ModelViewSet):
 
 class UserViewSet(BaseRelationsViewSet, BaseUserViewSet):
     queryset = User.objects.all()
+    serializer_class = UserSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = CustomPagination
 
