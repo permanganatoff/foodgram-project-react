@@ -4,7 +4,7 @@
 USERNAME_FIELD_CONST = 'email'
 
 # Set field list that required for creating a user via createsuperuser command
-REQUIRED_FIELDS_CONST = ('username', 'password')
+REQUIRED_FIELDS_CONST = ['username', 'password', 'first_name', 'last_name']
 
 # Minimum number for values in django models
 MIN_AMOUNT = 1
