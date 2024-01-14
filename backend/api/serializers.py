@@ -69,18 +69,15 @@ class SubscribeCreateSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     detail='no such subscribe',
                     code=status.HTTP_400_BAD_REQUEST)
-        else:
-            if user_id == author_id:
-                raise serializers.ValidationError(
-                    detail='you cannot subscribe to yourself',
-                    code=status.HTTP_400_BAD_REQUEST)
-
-            if Subscription.objects.filter(
-                    author=author_id, user=user_id).exists():
-                raise serializers.ValidationError(
-                    detail='already subscribed',
-                    code=status.HTTP_400_BAD_REQUEST)
-
+        if user_id == author_id:
+            raise serializers.ValidationError(
+                detail='you cannot subscribe to yourself',
+                code=status.HTTP_400_BAD_REQUEST)
+        if Subscription.objects.filter(
+                author=author_id, user=user_id).exists():
+            raise serializers.ValidationError(
+                detail='already subscribed',
+                code=status.HTTP_400_BAD_REQUEST)
         return data
 
     def to_representation(self, instance):
@@ -272,10 +269,9 @@ class ShoppingCartCreateDeleteSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     detail='no such object',
                     code=status.HTTP_400_BAD_REQUEST)
-        else:
-            if self.Meta.model.objects.filter(
-                    user=user_id, recipe=recipe_id).exists():
-                raise serializers.ValidationError('it has already been added')
+        if self.Meta.model.objects.filter(
+                user=user_id, recipe=recipe_id).exists():
+            raise serializers.ValidationError('it has already been added')
         return data
 
     def to_representation(self, instance):
