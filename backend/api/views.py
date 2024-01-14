@@ -42,17 +42,16 @@ class BaseRelationsViewSet:
 
     def relation_delete(self, request, serializer_class,
                         user_id, target_id, target_type):
-        serializer = serializer_class()
+        query_kwargs = {'user': user_id}
         if target_type == 'author':
-            serializer.validate_for_delete(
-                user_id=user_id, author_id=target_id)
-            serializer.Meta.model.objects.filter(
-                user_id=user_id, author_id=target_id).delete()
+            query_kwargs['author'] = target_id
         elif target_type == 'recipe':
-            serializer.validate_for_delete(
-                user_id=user_id, recipe_id=target_id)
-            serializer.Meta.model.objects.filter(
-                user_id=user_id, recipe_id=target_id).delete()
+            query_kwargs['recipe'] = target_id
+        serializer = serializer_class(
+            data=query_kwargs, context={'request': request}
+            )
+        serializer.is_valid(raise_exception=True)
+        serializer.Meta.model.objects.filter(**query_kwargs).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -113,9 +112,9 @@ class RecipeViewSet(BaseRelationsViewSet, viewsets.ModelViewSet):
     @action(methods=['get'], detail=False,
             permission_classes=[permissions.IsAuthenticated])
     def download_shopping_cart(self, request):
-        shopping_cart_text = generate_shopping_cart_text(request)
+        cart_text = generate_shopping_cart_text(request.user)
         response = HttpResponse(
-            shopping_cart_text,
+            cart_text,
             content_type='text/plain')
         response['Content-Disposition'] = (
             "attachment;filename='shopping_cart.txt'")

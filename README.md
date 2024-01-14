@@ -9,6 +9,12 @@ https://vm-permang.hopto.org/
 Документация по API доступна по адресу:
 https://vm-permang.hopto.org/api/docs
 
+Данные для авторизации администратора:
+username: a
+email: a@mail.com
+first_name: a
+last_name: a
+password: a
 
 ## Инструкция по установке
 
