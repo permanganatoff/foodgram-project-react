@@ -48,8 +48,7 @@ class BaseRelationsViewSet:
         elif target_type == 'recipe':
             query_kwargs['recipe'] = target_id
         serializer = serializer_class(
-            data=query_kwargs, context={'request': request}
-            )
+            data=query_kwargs, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.Meta.model.objects.filter(**query_kwargs).delete()
 
