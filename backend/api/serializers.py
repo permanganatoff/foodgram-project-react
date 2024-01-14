@@ -63,21 +63,23 @@ class SubscribeCreateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         author_id = data.get('author').id
         user_id = data.get('user').id
-        if self.context['request'].method == 'DELETE':
-            if not Subscription.objects.filter(
-                    author=author_id, user=user_id).exists():
-                raise serializers.ValidationError(
-                    detail='no such subscribe',
-                    code=status.HTTP_400_BAD_REQUEST)
+        if (self.context['request'].method == 'DELETE'
+                and not Subscription.objects.filter(
+                author=author_id, user=user_id).exists()):
+            raise serializers.ValidationError(
+                detail='no such subscribe',
+                code=status.HTTP_400_BAD_REQUEST)
         if user_id == author_id:
             raise serializers.ValidationError(
                 detail='you cannot subscribe to yourself',
                 code=status.HTTP_400_BAD_REQUEST)
-        if Subscription.objects.filter(
-                author=author_id, user=user_id).exists():
+        if (not self.context['request'].method == 'DELETE'
+                and Subscription.objects.filter(
+                author=author_id, user=user_id).exists()):
             raise serializers.ValidationError(
                 detail='already subscribed',
                 code=status.HTTP_400_BAD_REQUEST)
+
         return data
 
     def to_representation(self, instance):
@@ -263,14 +265,15 @@ class ShoppingCartCreateDeleteSerializer(serializers.ModelSerializer):
     def validate(self, data):
         user_id = data.get('user').id
         recipe_id = data.get('recipe').id
-        if self.context['request'].method == 'DELETE':
-            if not self.Meta.model.objects.filter(
-                    user_id=user_id, recipe_id=recipe_id).exists():
-                raise serializers.ValidationError(
-                    detail='no such object',
-                    code=status.HTTP_400_BAD_REQUEST)
-        if self.Meta.model.objects.filter(
-                user=user_id, recipe=recipe_id).exists():
+        if (self.context['request'].method == 'DELETE'
+                and not self.Meta.model.objects.filter(
+                user_id=user_id, recipe_id=recipe_id).exists()):
+            raise serializers.ValidationError(
+                detail='no such object',
+                code=status.HTTP_400_BAD_REQUEST)
+        if (not self.context['request'].method == 'DELETE'
+                and self.Meta.model.objects.filter(
+                user=user_id, recipe=recipe_id).exists()):
             raise serializers.ValidationError('it has already been added')
         return data
 
